@@ -1,6 +1,7 @@
 const port = 3000;
 const express = require("express");
 const app = express();
+const homeController = require("./controllers/homeController");
 
 app.use((req, res, next) => {
   console.log("In the middleware!");
