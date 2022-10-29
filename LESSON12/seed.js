@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const courses = require("./models/courses");
 const Subscriber = require("./models/subscriber");
 const Course = require("./models/courses");
+const User = require("./models/users");
 
 mongoose.connect("mongodb://localhost:27017/recipe_db", { useNewUrlParser: true });
 
@@ -15,7 +16,7 @@ const contacts = [
   },
   {
     name: "Chef Eggplant",
-    email: "aa@a.com",
+    email: "aaa@a.com",
     zipCode: 20331,
   },
   {
@@ -25,16 +26,9 @@ const contacts = [
   },
 ];
 
-const commands = [];
-
-contacts.forEach((c) => {
-  //テストユーザを作成するためのコマンドを準備
-  commands.push(Subscriber.create({ name: c.name, email: c.email, zipCode: c.zipCode }));
-});
-
 const showLogs = () => {
   //スキーマに生やしたインスタンスメソッド（getInfo）でログを出力する
-  Subscriber.findOne({
+  return Subscriber.findOne({
     name: "Jon Wexler",
   }).then((r) => {
     if (r) {
@@ -48,7 +42,7 @@ const createCourse = () => {
 
   let testCourse, testSubscriber;
 
-  Course.remove({})
+  return Course.deleteMany({})
     .then(() =>
       //コースのコレクションを新規に作り、そのインスタンスを変数に代入
       Course.create({
@@ -80,15 +74,39 @@ const createCourse = () => {
     });
 };
 
-//全件削除した後コマンドを実行
-Subscriber.remove({})
-  .then(() => console.log("delete all subscribers"))
-  .then(() => {
-    Promise.all(commands);
-  })
-  .then((r) => {
+const createUser = () => {
+  let testUser;
+  return User.deleteMany({})
+    .then(() =>
+      User.create({
+        name: {
+          first: "Jon",
+          last: "Wexler",
+        },
+        email: "my@my.com",
+        password: "password",
+      })
+    )
+    .then((user) => (testUser = user))
+    .catch((e) => console.log(e.message));
+};
+
+const createSubscriber = () => {
+  const commands = [];
+  contacts.forEach((c) => {
+    commands.push(Subscriber.create({ name: c.name, email: c.email, zipCode: c.zipCode }));
+  });
+  return Promise.all(commands).then((r) => {
     console.log(JSON.stringify(r));
-  })
+  });
+};
+
+//全件削除した後コマンドを実行
+Subscriber.deleteMany({})
+  .then(() => console.log("delete all subscribers"))
+  .then(createSubscriber)
   .then(showLogs)
   .then(createCourse)
-  .catch((e) => console.log(e));
+  .then(createUser)
+  .catch((e) => console.log(e))
+  .finally(() => db.close());
