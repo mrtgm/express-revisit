@@ -20,6 +20,7 @@ app.get("/", homeController.respondWithName);
 app.get("/name/:myName", homeController.respondWithName);
 
 // エラー処理は必ず末尾に
+app.use(errorController.logErrors);
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
