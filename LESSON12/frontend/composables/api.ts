@@ -20,7 +20,7 @@ const useMyFetch = <T>(
   };
 
   const onRequest = ({ request, options }) => {
-    console.log("onRequest", request);
+    console.log("onRequest", request, options);
   };
 
   const onRequestError = ({ request, options, error }) => {
@@ -47,7 +47,7 @@ export type SubscriberEntity = {
   courses: string[];
 };
 
-export type AddSubscriberOptions = {
+export type SubscriberOptions = {
   name: string;
   email: string;
   zipCode: string;
@@ -74,14 +74,14 @@ export type UserOptions = {
 };
 
 export const fetchSubscriber = (paramsId: string) => {
-  return useMyFetch<UserEntity>(`/subscribers/${paramsId}`);
+  return useMyFetch<SubscriberEntity>(`/subscribers/${paramsId}`);
 };
 
 export const fetchSubscribers = () => {
   return useMyFetch<SubscriberEntity[]>("/subscribers");
 };
 
-export const createSubscriber = (options: AddSubscriberOptions) => {
+export const createSubscriber = (options: SubscriberOptions) => {
   const { name, email, zipCode } = options;
 
   return useMyFetch<SubscriberEntity>("/subscribers/create", {
@@ -91,6 +91,25 @@ export const createSubscriber = (options: AddSubscriberOptions) => {
       email,
       zipCode,
     },
+  });
+};
+
+export const updateSubscriber = (paramsId: string, options: SubscriberOptions) => {
+  const { name, email, zipCode } = options;
+
+  return useMyFetch<UserEntity>(`/subscribers/${paramsId}/update`, {
+    method: "PUT",
+    body: {
+      name,
+      email,
+      zipCode,
+    },
+  });
+};
+
+export const deleteSubscriber = (paramsId: string) => {
+  return useMyFetch<SubscriberEntity>(`/subscribers/${paramsId}/delete`, {
+    method: "DELETE",
   });
 };
 
@@ -121,6 +140,9 @@ export const updateUser = (paramsId: string, options: UserOptions) => {
 
   return useMyFetch<UserEntity>(`/users/${paramsId}/update`, {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: {
       name: { first: firstName, last: lastName },
       password,

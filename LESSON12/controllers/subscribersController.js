@@ -22,9 +22,25 @@ module.exports = {
       res.status(200).json(result);
     });
   },
-  show: (req, res, next) => {
+  show: async (req, res, next) => {
     try {
-      const result = Subscriber.findById(req.params.id);
+      const result = await Subscriber.findById(req.params.id);
+      res.status(200).json(result);
+    } catch (e) {
+      next(e);
+    }
+  },
+  update: async (req, res, next) => {
+    try {
+      const result = await Subscriber.findByIdAndUpdate(req.params.id, req.body);
+      res.status(200).json(result);
+    } catch (e) {
+      next(e);
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      const result = await Subscriber.findByIdAndRemove(req.params.id);
       res.status(200).json(result);
     } catch (e) {
       next(e);

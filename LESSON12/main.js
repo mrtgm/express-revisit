@@ -30,8 +30,8 @@ app.use("/", router);
 app.use(express.static("public"));
 app.use(layouts);
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+router.use(express.urlencoded({ extended: false }));
+router.use(express.json());
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -39,6 +39,8 @@ router.get("/", (req, res) => {
 
 router.get("/subscribers", subscribersController.index);
 router.get("/subscribers/:id", subscribersController.show);
+router.put("/subscribers/:id/update", subscribersController.update);
+router.delete("/subscribers/:id/delete", subscribersController.delete);
 router.post("/subscribers/create", subscribersController.create);
 
 router.get("/users", usersController.index);
