@@ -2,8 +2,8 @@
   <header class="header">
     <ul>
       <li><nuxt-link to="/">Home</nuxt-link></li>
-      <li><nuxt-link to="/user">User</nuxt-link></li>
-      <li><nuxt-link to="/subscriber">Subscriber</nuxt-link></li>
+      <li><nuxt-link to="/users">User</nuxt-link></li>
+      <li><nuxt-link to="/subscribers">Subscriber</nuxt-link></li>
     </ul>
   </header>
 </template>

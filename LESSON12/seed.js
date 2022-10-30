@@ -93,6 +93,7 @@ const createUser = () => {
           first: "Jon",
           last: "Wexler",
         },
+        zipCode: 10016,
         email: "my@my.com",
         password: "password",
       })

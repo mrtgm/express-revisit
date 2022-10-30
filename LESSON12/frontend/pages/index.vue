@@ -1,14 +1,14 @@
 <template>
   <div v-if="!pending">
-    <div v-for="d in data" :key="d._id">
+    <div class="subscriber-list" v-for="d in data" :key="d._id">
       <ul>
-        <li>{{ d.name }}</li>
-        <li>{{ d.email }}</li>
-        <li>{{ d.zipCode }}</li>
-        <li v-for="course of d.courses">{{ course }}</li>
+        <li>Name: {{ d.name }}</li>
+        <li>Email: {{ d.email }}</li>
+        <li>ZipCode: {{ d.zipCode }}</li>
+        <li v-for="course of d.courses">Course: {{ course }}</li>
       </ul>
     </div>
-    <div>
+    <div class="subscriber-add-form">
       <form @submit.prevent="add">
         <input v-model="formData.name" />
         <input v-model="formData.email" />
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { fetchSubscribers, addSubscriber } from "~/composables/api";
+import { fetchSubscribers, createSubscriber } from "~/composables/api";
 
 const formData = ref({
   name: "",
@@ -31,7 +31,7 @@ const formData = ref({
 const { data, error, pending, refresh } = await fetchSubscribers();
 
 const add = async () => {
-  const { error } = await addSubscriber(formData.value);
+  const { error } = await createSubscriber(formData.value);
 
   formData.value = {
     name: "",
@@ -41,3 +41,21 @@ const add = async () => {
   refresh();
 };
 </script>
+
+<style lang="scss" scoped>
+.subscriber-list {
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  ul {
+    list-style: none;
+  }
+}
+
+.subscriber-add-form {
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+</style>

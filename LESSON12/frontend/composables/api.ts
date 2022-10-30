@@ -15,7 +15,7 @@ const useMyFetch = <T>(
   };
 
   const onResponseError = ({ request, options, response }) => {
-    console.error("onResponseError", response.status, response.statusText, response._data);
+    console.error("onResponseError \n", response.status, response.statusText, response._data.message);
     throw new Error(response._data.message);
   };
 
@@ -39,7 +39,7 @@ const useMyFetch = <T>(
   });
 };
 
-type SubscriberEntity = {
+export type SubscriberEntity = {
   _id: string;
   name: string;
   email: string;
@@ -47,24 +47,91 @@ type SubscriberEntity = {
   courses: string[];
 };
 
-type AddSubscriberOptions = {
+export type AddSubscriberOptions = {
   name: string;
   email: string;
   zipCode: string;
 };
+
+export type UserEntity = {
+  _id: string;
+  name: {
+    first: string;
+    last: string;
+  };
+  email: string;
+  zipCode: string;
+  password?: string;
+  subscribedAccount?: string;
+};
+
+export type UserOptions = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  zipCode: string;
+  password: string;
+};
+
+export const fetchSubscriber = (paramsId: string) => {
+  return useMyFetch<UserEntity>(`/subscribers/${paramsId}`);
+};
+
 export const fetchSubscribers = () => {
   return useMyFetch<SubscriberEntity[]>("/subscribers");
 };
 
-export const addSubscriber = (options: AddSubscriberOptions) => {
+export const createSubscriber = (options: AddSubscriberOptions) => {
   const { name, email, zipCode } = options;
 
-  return useMyFetch<SubscriberEntity>("/subscribers", {
+  return useMyFetch<SubscriberEntity>("/subscribers/create", {
     method: "POST",
     body: {
       name,
       email,
       zipCode,
     },
+  });
+};
+
+export const fetchUser = (paramsId: string) => {
+  return useMyFetch<UserEntity>(`/users/${paramsId}`);
+};
+
+export const fetchUsers = () => {
+  return useMyFetch<UserEntity[]>("/users");
+};
+
+export const createUser = (options: UserOptions) => {
+  const { firstName, lastName, password, email, zipCode } = options;
+
+  return useMyFetch<UserEntity>("/users/create", {
+    method: "POST",
+    body: {
+      name: { first: firstName, last: lastName },
+      password,
+      email,
+      zipCode,
+    },
+  });
+};
+
+export const updateUser = (paramsId: string, options: UserOptions) => {
+  const { firstName, lastName, password, email, zipCode } = options;
+
+  return useMyFetch<UserEntity>(`/users/${paramsId}/update`, {
+    method: "PUT",
+    body: {
+      name: { first: firstName, last: lastName },
+      password,
+      email,
+      zipCode,
+    },
+  });
+};
+
+export const deleteUser = (userId: string) => {
+  return useMyFetch<UserEntity>(`/users/${userId}/delete`, {
+    method: "DELETE",
   });
 };
