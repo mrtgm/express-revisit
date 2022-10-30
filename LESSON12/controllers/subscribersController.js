@@ -24,5 +24,6 @@ exports.saveSubscriber = (req, res, next) => {
   });
   newSubscriber.save((e, result) => {
     if (e) next(e);
+    res.send(result);
   });
 };

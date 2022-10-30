@@ -11,7 +11,7 @@ const db = mongoose.connection;
 const contacts = [
   {
     name: "Jon Wexler",
-    email: "a@a.com",
+    email: "my@my.com",
     zipCode: 10016,
   },
   {
@@ -25,6 +25,16 @@ const contacts = [
     zipCode: 19103,
   },
 ];
+
+const createSubscriber = () => {
+  const commands = [];
+  contacts.forEach((c) => {
+    commands.push(Subscriber.create({ name: c.name, email: c.email, zipCode: c.zipCode }));
+  });
+  return Promise.all(commands).then((r) => {
+    console.log(JSON.stringify(r));
+  });
+};
 
 const showLogs = () => {
   //スキーマに生やしたインスタンスメソッド（getInfo）でログを出力する
@@ -87,18 +97,16 @@ const createUser = () => {
         password: "password",
       })
     )
-    .then((user) => (testUser = user))
+    .then((user) => {
+      testUser = user;
+      return Subscriber.findOne({ email: user.email });
+    })
+    .then((subscriber) => {
+      ///メアドでユーザと購読者を紐付けて保存
+      testUser.subscribedAccount = subscriber;
+      return testUser.save().then((user) => console.log(user));
+    })
     .catch((e) => console.log(e.message));
-};
-
-const createSubscriber = () => {
-  const commands = [];
-  contacts.forEach((c) => {
-    commands.push(Subscriber.create({ name: c.name, email: c.email, zipCode: c.zipCode }));
-  });
-  return Promise.all(commands).then((r) => {
-    console.log(JSON.stringify(r));
-  });
 };
 
 //全件削除した後コマンドを実行
