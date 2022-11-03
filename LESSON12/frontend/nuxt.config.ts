@@ -1,16 +1,17 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  vite: {
-    server: {
-      proxy: {
-        "/api": {
-          target: "http://localhost:3000",
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
-        },
-      },
-    },
-  },
+  // vite: {
+  //   server: {
+  //     proxy: {
+  //       "/api": {
+  //         target: "http://localhost:3000",
+  //         changeOrigin: true,
+  //         secure: true,
+  //         rewrite: (path) => path.replace(/^\/api/, ""),
+  //       },
+  //     },
+  //   },
+  // },
   vue: {
     config: {
       productionTip: true,

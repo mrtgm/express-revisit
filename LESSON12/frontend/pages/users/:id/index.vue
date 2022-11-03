@@ -3,6 +3,7 @@
     <p>Name: {{ getFullName(user) }}</p>
     <p>Email: {{ user?.email }}</p>
     <p>ZipCode: {{ user?.zipCode }}</p>
+    <p>Password: {{ user?.salt }} {{ user?.hash }}</p>
     <div v-if="user?.subscribedAccount">
       <NuxtLink :to="`/subscribers/${user?.subscribedAccount}`">{{ user?.subscribedAccount }}</NuxtLink>
     </div>

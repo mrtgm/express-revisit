@@ -4,6 +4,7 @@
       <li><nuxt-link to="/">Home</nuxt-link></li>
       <li><nuxt-link to="/users">User</nuxt-link></li>
       <li><nuxt-link to="/subscribers">Subscriber</nuxt-link></li>
+      <li><nuxt-link to="/users/login">Login</nuxt-link></li>
     </ul>
   </header>
 </template>

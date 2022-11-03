@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const Subscriber = require("./subscriber");
 const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
     name: {
-      first: { type: String, required: true },
+      first: { type: String, trim: true },
       last: {
         type: String,
         trim: true,
@@ -34,29 +35,56 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.methods = {
+  //モデルにパスワード比較用のメソッドを定義
+  comparePassword(inputPassword) {
+    return bcrypt.compareSync(inputPassword, this.password);
+  },
+};
+
 //スキーマのインスタンスに算出属性を加える、EJS から参照できる（不要？）
 userSchema.virtual("fullName").get(function () {
   return `${this.name.first} ${this.name.last}`;
 });
 
-//保存されたら subscribedAccount に、同じメアドの購読者を紐づける
 userSchema.pre("save", function (next) {
   let user = this;
-  if (user.subscribedAccount === undefined) {
-    Subscriber.findOne({
-      email: user.email,
-    })
-      .then((subscriber) => {
-        user.subscribedAccount = subscriber;
-        next();
+
+  const hashPassword = () => {
+    //   保存されたら bcrypt でパスワードをハッシュ化する
+    return bcrypt
+      .hash(user.password, 10)
+      .then((hash) => {
+        user.password = hash;
       })
       .catch((error) => {
-        next(error);
+        throw new Error(error);
       });
-  } else {
-    //既に既存の関連があれば何もしない
-    next();
-  }
+  };
+
+  const registerSubscriber = () => {
+    //保存されたら subscribedAccount に、同じメアドの購読者を紐づける
+    if (user.subscribedAccount === undefined) {
+      return Subscriber.findOne({
+        email: user.email,
+      })
+        .then((subscriber) => {
+          user.subscribedAccount = subscriber;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    } else {
+      //既に既存の関連があれば何もしない
+      return;
+    }
+  };
+
+  //パスワードをハッシュ化してから、購読者を紐づける
+  hashPassword()
+    .then(() => registerSubscriber())
+    .then(() => next())
+    .catch((error) => next(error));
 });
 
 module.exports = mongoose.model("User", userSchema);

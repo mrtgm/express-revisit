@@ -33,14 +33,6 @@ const formData = ref({
 const add = async () => {
   const { error } = await createUser(formData.value);
 
-  formData.value = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    zipCode: "",
-  };
-
   if (!error.value) {
     router.push("/users");
   } else {

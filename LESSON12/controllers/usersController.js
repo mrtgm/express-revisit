@@ -1,19 +1,28 @@
 const User = require("../models/users.js");
+const { validationResult } = require("express-validator");
+const passport = require("passport");
 
 module.exports = {
   index: async (req, res, next) => {
     try {
       const users = await User.find({});
-      res.status(200).json(users);
+      return res.status(200).json(users);
     } catch (e) {
       next(e);
     }
   },
   create: async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const messages = errors.array().map((e) => `${e.param} is ${e.msg}`);
+      return res.status(400).json({ message: messages.join(" and ") }); //ちゃんと return する
+    }
+
     try {
       const user = new User(req.body);
       const result = await user.save();
-      res.status(200).json(result);
+      return res.status(200).json(result);
     } catch (e) {
       next(e);
     }
@@ -21,7 +30,7 @@ module.exports = {
   show: async (req, res, next) => {
     try {
       const user = await User.findById(req.params.id);
-      res.status(200).json(user);
+      return res.status(200).json(user);
     } catch (e) {
       next(e);
     }
@@ -29,7 +38,7 @@ module.exports = {
   update: async (req, res, next) => {
     try {
       const user = await User.findByIdAndUpdate(req.params.id, req.body);
-      res.status(200).json(user);
+      return res.status(200).json(user);
     } catch (e) {
       next(e);
     }
@@ -38,6 +47,29 @@ module.exports = {
     try {
       const user = await User.findByIdAndRemove(req.params.id);
       res.status(200).json(user);
+    } catch (e) {
+      next(e);
+    }
+  },
+  authenticate: async (req, res, next) => {
+    res.status(200).json(user);
+  },
+  my: async (req, res, next) => {
+    console.log(req);
+    try {
+      if (!req.user) {
+        return res.status(204).send();
+      }
+      const user = await User.findById(req.user._id);
+      return res.status(200).json(user);
+    } catch (e) {
+      next(e);
+    }
+  },
+  logout: async (req, res, next) => {
+    try {
+      req.logout();
+      return res.status(200).json({ message: "Logout Successful" });
     } catch (e) {
       next(e);
     }

@@ -24,13 +24,16 @@ const useMyFetch = <T>(
   };
 
   const onRequestError = ({ request, options, error }) => {
-    console.error("onRequestError", request);
+    console.error("onRequestError", request, error);
     throw new Error(request);
   };
 
   return useFetch<T>(request, {
     baseURL: config.public.baseUrl,
     initialCache: false,
+    credentials: "include", //withCredentials: true
+    mode: "cors",
+    // headers: useRequestHeaders(),
     onResponse,
     onResponseError,
     onRequest,
@@ -61,7 +64,8 @@ export type UserEntity = {
   };
   email: string;
   zipCode: string;
-  password?: string;
+  salt?: string;
+  hash?: string;
   subscribedAccount?: string;
 };
 
@@ -70,6 +74,11 @@ export type UserOptions = {
   lastName: string;
   email: string;
   zipCode: string;
+  password: string;
+};
+
+export type LoginOptions = {
+  email: string;
   password: string;
 };
 
@@ -121,6 +130,10 @@ export const fetchUsers = () => {
   return useMyFetch<UserEntity[]>("/users");
 };
 
+export const fetchCurrentUser = () => {
+  return useMyFetch<UserEntity>("/users/my");
+};
+
 export const createUser = (options: UserOptions) => {
   const { firstName, lastName, password, email, zipCode } = options;
 
@@ -155,5 +168,17 @@ export const updateUser = (paramsId: string, options: UserOptions) => {
 export const deleteUser = (userId: string) => {
   return useMyFetch<UserEntity>(`/users/${userId}/delete`, {
     method: "DELETE",
+  });
+};
+
+export const loginUser = (options: LoginOptions) => {
+  const { email, password } = options;
+
+  return useMyFetch<UserEntity>("/users/login", {
+    method: "POST",
+    body: {
+      email,
+      password,
+    },
   });
 };
