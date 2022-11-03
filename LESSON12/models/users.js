@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const randToken = require("rand-token");
+
 const Subscriber = require("./subscriber");
 const { Schema } = mongoose;
 
@@ -27,6 +29,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    token: {
+      type: String,
+      unique: true,
+    },
     courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
     subscribedAccount: { type: Schema.Types.ObjectId, ref: "Subscriber" },
   },
@@ -49,6 +55,13 @@ userSchema.virtual("fullName").get(function () {
 
 userSchema.pre("save", function (next) {
   let user = this;
+
+  const generateRandToken = () => {
+    return new Promise((resolve, reject) => {
+      user.token = randToken.generate(16);
+      resolve(user.token);
+    });
+  };
 
   const hashPassword = () => {
     //   保存されたら bcrypt でパスワードをハッシュ化する
@@ -83,6 +96,7 @@ userSchema.pre("save", function (next) {
   //パスワードをハッシュ化してから、購読者を紐づける
   hashPassword()
     .then(() => registerSubscriber())
+    .then(() => generateRandToken())
     .then(() => next())
     .catch((error) => next(error));
 });

@@ -1,16 +1,16 @@
 <template>
   <div>
     <NuxtLink to="/users/login">Login</NuxtLink>
-    <div v-if="currentUser">
+    <div v-if="loggedIn">
       <p>Current User: {{ currentUser?.email }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { fetchCurrentUser } from "~/composables/api";
+import { useAuthStore } from "~~/store/auth";
 
-const { data: currentUser, error, pending, refresh } = await fetchCurrentUser();
+const { loggedIn, currentUser } = useAuthStore();
 </script>
 
 <style lang="scss" scoped>

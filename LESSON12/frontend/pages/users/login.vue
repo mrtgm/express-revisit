@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import { loginUser } from "~/composables/api";
+import { useAuthStore } from "~~/store/auth";
 
 const formData = ref({
   email: "",
@@ -19,15 +20,14 @@ const formData = ref({
 });
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const login = async () => {
-  const { error } = await loginUser(formData.value);
-
-  if (!error.value) {
-    router.push("/users");
-    console.log("ログイン成功");
-  } else {
-    alert("失敗しました");
+  try {
+    await authStore.login(formData.value);
+    router.push("/");
+  } catch (error) {
+    alert("ログインに失敗しました");
   }
 };
 </script>

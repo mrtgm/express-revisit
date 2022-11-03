@@ -7,14 +7,12 @@ const LocalStrategy = require("passport-local");
 module.exports = function (app) {
   //ユーザ情報をセッションに保存
   passport.serializeUser(function (user, done) {
-    console.log("serializeUser", user);
     done(null, user.id); //user.idをセッションに保存
   });
 
   //セッションに保存されたIDからユーザを特定し、リクエスト時に req.user にセットする
   passport.deserializeUser(async function (id, done) {
     // id は serializeUser でセットした user.id
-    console.log("deserializeUser", id);
     try {
       const user = await User.findById(id);
       done(null, user); //req.user にセットされる

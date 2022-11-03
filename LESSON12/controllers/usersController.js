@@ -60,11 +60,11 @@ module.exports = {
     }
   },
   logout: async (req, res, next) => {
-    try {
-      req.logout();
-      return res.status(200).json({ message: "Logout Successful" });
-    } catch (e) {
-      next(e);
-    }
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+    });
+    res.status(200).json({ message: "Logout Successfully" });
   },
 };

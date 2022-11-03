@@ -8,6 +8,7 @@
         <p>Name: {{ getFullName(user) }}</p>
         <p>Email: {{ user.email }}</p>
         <p>ZipCode: {{ user.zipCode }}</p>
+        <p v-if="user.token">Token: {{ user.token }}</p>
       </NuxtLink>
       <NuxtLink :to="`/users/${user._id}/edit`">Edit</NuxtLink>
       <span class="delete" @click="handleClickDelete(user._id)">Delete</span>

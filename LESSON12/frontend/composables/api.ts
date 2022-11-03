@@ -1,5 +1,6 @@
 import { UseFetchOptions } from "#app";
 import { NitroFetchRequest } from "nitropack";
+import { useAuthStore } from "~/store/auth";
 import { KeyOfRes } from "nuxt/dist/app/composables/asyncData";
 
 const useMyFetch = <T>(
@@ -9,6 +10,7 @@ const useMyFetch = <T>(
     | undefined
 ) => {
   const config = useRuntimeConfig();
+  const authStore = useAuthStore();
 
   const onResponse = ({ request, response, options }) => {
     console.log("onResponse", response._data);
@@ -29,11 +31,12 @@ const useMyFetch = <T>(
   };
 
   return useFetch<T>(request, {
+    key: request.toString(),
     baseURL: config.public.baseUrl,
     initialCache: false,
-    credentials: "include", //withCredentials: true
+    credentials: "include",
     mode: "cors",
-    headers: useRequestHeaders(["cookie"]),
+    headers: { ...useRequestHeaders(["cookie"]), Authorization: `Bearer ${authStore.token}` },
     onResponse,
     onResponseError,
     onRequest,
@@ -64,6 +67,7 @@ export type UserEntity = {
   };
   email: string;
   zipCode: string;
+  token?: string;
   salt?: string;
   hash?: string;
   subscribedAccount?: string;
@@ -180,5 +184,11 @@ export const loginUser = (options: LoginOptions) => {
       email,
       password,
     },
+  });
+};
+
+export const logoutUser = () => {
+  return useMyFetch<UserEntity>("/users/logout", {
+    method: "POST",
   });
 };
