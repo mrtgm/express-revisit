@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   //     },
   //   },
   // },
+  buildModules: ["@pinia/nuxt"],
   vue: {
     config: {
       productionTip: true,

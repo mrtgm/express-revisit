@@ -51,15 +51,8 @@ module.exports = {
       next(e);
     }
   },
-  authenticate: async (req, res, next) => {
-    res.status(200).json(user);
-  },
   my: async (req, res, next) => {
-    console.log(req);
     try {
-      if (!req.user) {
-        return res.status(204).send();
-      }
       const user = await User.findById(req.user._id);
       return res.status(200).json(user);
     } catch (e) {

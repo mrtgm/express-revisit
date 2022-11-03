@@ -36,8 +36,7 @@ if (process.env.NODE_ENV !== "production") {
     credentials: true, // Access-Control-Allow-Credentials
   };
 
-  //疑問：Access-Control-Request-Headers, Access-Control-Request-Method は不要？
-  //疑問：preflight request は不要？
+  //preflight request 周り（Method, option メソッドへの応答)は cors モジュールがやってくれてる
 
   router.use(cors(options));
 }
@@ -47,21 +46,10 @@ router.use(middleware.logger);
 router.use(express.static("public"));
 router.use(layouts);
 
-//router.use(cookieParser("secret_passcode"));
-
-//ExpressSession は Cookie にセッションIDを保存し、セッションデータはサーバー側に保存する
-//req.session でセッションデータにアクセスできる
-
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
 
 require("./passport")(router);
-
-//最後にログインしたユーザのデータを Cookie に保存、サーバはセッション開始時にそのデータを比較して認証
-//req.user に入ってくるようになる
-// passport.use(User.createStrategy());
-// passport.serializeUser(User.serializeUser()); //ブラウザ用に暗号化
-// passport.deserializeUser(User.deserializeUser()); //ブラウザから複合
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -80,11 +68,11 @@ router.get("/users/my", checkAuthentication, (req, res) => {
 });
 
 function checkAuthentication(req, res, next) {
-  console.log(req.user);
   if (req.isAuthenticated()) {
+    //passport が提供するログイン判定用の関数
     next();
   } else {
-    res.status(204).send();
+    res.status(401).json("Not Authenticated");
   }
 }
 
@@ -98,6 +86,7 @@ router.post("/users/login", (req, res, next) => {
       return res.status(401).send(info);
     }
     req.login(user, (err) => {
+      //serializeUserを呼び出し、セッションにユーザー情報を保存してセッション確立
       if (err) {
         return next(err);
       }
