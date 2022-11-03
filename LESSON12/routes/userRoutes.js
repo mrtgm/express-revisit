@@ -6,29 +6,10 @@ const { body } = require("express-validator");
 
 router.get("/", usersController.index);
 
-router.get("/my", middleware.checkAuthentication, (req, res) => {
-  return res.status(200).json(req.user);
-});
+router.get("/my", middleware.checkAuthentication, usersController.my);
 
 // /users/:id と勘違いされないように上に書く
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).send(info);
-    }
-    req.login(user, (err) => {
-      //serializeUserを呼び出し、セッションにユーザー情報を保存してセッション確立
-      if (err) {
-        return next(err);
-      }
-      return res.status(200).json(user);
-    });
-  })(req, res, next);
-});
-
+router.post("/login", usersController.login);
 router.post("/logout", middleware.checkAuthentication, usersController.logout);
 
 router.post(

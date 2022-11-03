@@ -1,6 +1,7 @@
 const User = require("../models/users.js");
 const { validationResult } = require("express-validator");
 const passport = require("passport");
+const jsonWebToken = require("jsonwebtoken");
 
 module.exports = {
   index: async (req, res, next) => {
@@ -51,13 +52,8 @@ module.exports = {
       next(e);
     }
   },
-  my: async (req, res, next) => {
-    try {
-      const user = await User.findById(req.user._id);
-      return res.status(200).json(user);
-    } catch (e) {
-      next(e);
-    }
+  my: async (req, res) => {
+    return res.status(200).json(req.user);
   },
   logout: async (req, res, next) => {
     req.logout(function (err) {
@@ -66,5 +62,34 @@ module.exports = {
       }
     });
     res.status(200).json({ message: "Logout Successfully" });
+  },
+  login: async (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).send(info);
+      }
+      req.login(user, (err) => {
+        //serializeUserを呼び出し、セッションにユーザー情報を保存してセッション確立
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).json(user);
+      });
+    })(req, res, next);
+  },
+  apiAuthenticate: async (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).send(info);
+      }
+      const token = jsonWebToken.sign({ id: user._id, exp: new Date().setDate(new Date().getDate() + 1) }, "secret");
+      res.status(200).json({ token: token });
+    })(req, res, next);
   },
 };

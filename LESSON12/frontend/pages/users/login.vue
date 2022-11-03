@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { loginUser } from "~/composables/api";
 import { useAuthStore } from "~~/store/auth";
 
 const formData = ref({
