@@ -33,7 +33,7 @@ const useMyFetch = <T>(
     initialCache: false,
     credentials: "include", //withCredentials: true
     mode: "cors",
-    // headers: useRequestHeaders(),
+    headers: useRequestHeaders(["cookie"]),
     onResponse,
     onResponseError,
     onRequest,
