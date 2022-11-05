@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import routes from "~/routes";
+import { logger } from "~/middleware";
 
 const app: express.Express = express();
 
@@ -18,7 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS
-
 if (process.env.NODE_ENV !== "production") {
   const corsOptions = {
     origin: "http://localhost:8080",
@@ -26,6 +27,12 @@ if (process.env.NODE_ENV !== "production") {
   };
   app.use(cors(corsOptions));
 }
+
+// Routes
+app.use("/", routes);
+
+// Debug
+app.use(logger);
 
 app.listen(app.get("port"), () => {
   console.log(`Server on port ${app.get("port")}`);
