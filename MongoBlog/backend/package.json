@@ -4,7 +4,7 @@
   "description": "",
   "exports": "./index.js",
   "scripts": {
-    "dev": "nodemon --exec node --loader ts-node/esm main.ts",
+    "dev": "nodemon --exec node --experimental-specifier-resolution=node --loader ./path-resolver.js ./main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -23,8 +23,10 @@
     "express-validator": "^6.14.2",
     "mongodb": "^4.11.0",
     "mongoose": "^6.7.1",
+    "nodemon": "^2.0.15",
     "passport": "^0.6.0",
     "ts-node": "^10.9.1",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.1.0"
   }
 }
