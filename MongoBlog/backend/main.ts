@@ -1,7 +1,16 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
 
 const app: express.Express = express();
+
+mongoose.connect(process.env.MONGO_DB_URI as string);
+
+const db = mongoose.connection;
+
+db.once("open", () => {
+  console.log("Successfully connected to MongoDB using Mongoose!");
+});
 
 app.set("port", 8080);
 
@@ -12,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 if (process.env.NODE_ENV !== "production") {
   const corsOptions = {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:8080",
     credentials: true,
   };
   app.use(cors(corsOptions));
