@@ -1,23 +1,25 @@
-import express from "express";
-import cors from "cors";
+console.log("t");
 
-const app: express.Express = express();
+// import express from "express/lib/";
+// import cors from "cors";
 
-app.set("port", 3000);
+// const app: express.Express = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.set("port", 3000);
 
-// CORS
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV !== "production") {
-  const corsOptions = {
-    origin: "http://localhost:3000",
-    credentials: true,
-  };
-  app.use(cors(corsOptions));
-}
+// // CORS
 
-app.listen(app.get("port"), () => {
-  console.log(`Server on port ${app.get("port")}`);
-});
+// if (process.env.NODE_ENV !== "production") {
+//   const corsOptions = {
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   };
+//   // app.use(cors(corsOptions));
+// }
+
+// app.listen(app.get("port"), () => {
+//   console.log(`Server on port ${app.get("port")}`);
+// });
