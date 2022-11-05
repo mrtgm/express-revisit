@@ -1,10 +1,10 @@
 {
-  "name": "backend",
+  "name": "mongoblog-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon main.ts",
+    "dev": "nodemon main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
