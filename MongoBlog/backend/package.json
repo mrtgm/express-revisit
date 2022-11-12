@@ -5,7 +5,8 @@
   "exports": "./index.js",
   "scripts": {
     "dev": "nodemon --exec node --experimental-specifier-resolution=node --loader ./path-resolver.js ./main.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node --experimental-specifier-resolution=node --loader ./path-resolver.js ./seed.ts"
   },
   "engines": {
     "node": ">=14.16"
