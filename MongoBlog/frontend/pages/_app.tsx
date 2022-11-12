@@ -1,12 +1,13 @@
 import '../styles/globals.css';
-import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ApiProvider } from '~/context/api';
 import { ChakraProvider } from '@chakra-ui/react';
+import type { AppPropsWithLayout } from 'next/app';
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const queryClient = new QueryClient();
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
     <Auth0Provider
@@ -18,9 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
     >
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
-          <ChakraProvider>
-            <Component {...pageProps} />
-          </ChakraProvider>
+          <ChakraProvider>{getLayout(<Component {...pageProps} />)}</ChakraProvider>
         </QueryClientProvider>
       </ApiProvider>
     </Auth0Provider>

@@ -1,11 +1,11 @@
 import { ArticleModel } from '~/models';
 import { Request, Response, NextFunction } from 'express';
-import { ResumeOptions } from 'mongodb';
+import paginate from 'express-paginate';
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   //Validate Req
   if (!req.body.content) {
-    res.status(400).send({ message: 'Content can not be empty' }); //Q: 400? 400 Bad Request
+    res.status(400).send({ message: 'Content can not be empty' });
     return;
   }
 
@@ -25,12 +25,17 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
-  const title = req.query.title as string;
-  const condition = title ? { title: { $regex: new RegExp(title), $options: 'i' } } : {};
+  //https://qiita.com/takehilo/items/0163426cce40452ff2ac
 
   try {
-    const data = await ArticleModel.find(condition); //Q: ?
-    res.json(data);
+    const data = await ArticleModel.paginate({}, { page: Number(req.query.page), limit: Number(req.query.limit) });
+    res.json({
+      data: data.docs,
+      pagination: {
+        page: data.page,
+        totalPages: data.pages,
+      },
+    });
   } catch (err) {
     next(err);
   }

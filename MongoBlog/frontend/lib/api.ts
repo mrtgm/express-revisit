@@ -1,7 +1,15 @@
 import axios, { Axios, AxiosAdapter, AxiosInstance, AxiosResponse } from 'axios';
 
-type ApiHandlerOption = {
+export type ApiHandlerOption = {
   accessToken?: string;
+};
+
+export type PaginatedResponse<T> = {
+  data: T[];
+  pagination: {
+    page: number;
+    totalPages: number;
+  };
 };
 
 export type ArticleEntity = {
@@ -13,14 +21,19 @@ export type ArticleEntity = {
   createdAt: string;
 };
 
-type ArticleOption = {
+export type CreateArticleOption = {
   title: string;
   content: string;
   author: string;
   published: boolean;
 };
 
-class ApiHandler {
+export type GetArticleOption = {
+  page: number;
+  limit: number;
+};
+
+export default class ApiHandler {
   private api: AxiosInstance;
 
   public accessToken: string;
@@ -41,17 +54,23 @@ class ApiHandler {
     console.log(response);
   }
 
-  public getArticles = () => this.api.get<ArticleEntity[]>('/articles').then((res) => res.data);
+  public getArticles = (option: GetArticleOption) =>
+    this.api
+      .get<PaginatedResponse<ArticleEntity>>('/articles', {
+        params: {
+          page: option.page,
+          limit: option.limit,
+        },
+      })
+      .then((res) => res.data);
 
   public getArticle = (id: string) => this.api.get<ArticleEntity>(`/articles/${id}`).then((res) => res.data);
 
-  public createArticle = (article: ArticleOption) =>
+  public createArticle = (article: CreateArticleOption) =>
     this.api.post<ArticleEntity>('/articles', article).then((res) => res.data);
 
-  public updateArticle = (id: string, article: ArticleOption) =>
+  public updateArticle = (id: string, article: CreateArticleOption) =>
     this.api.put<ArticleEntity>(`/articles/${id}`, article).then((res) => res.data);
 
   public deleteArticle = (id: string) => this.api.delete(`/articles/${id}`).then((res) => res.data);
 }
-
-export default ApiHandler;

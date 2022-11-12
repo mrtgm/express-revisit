@@ -31,6 +31,48 @@ const seed = async () => {
       content: 'This is the third article',
       published: false,
     },
+    {
+      title: 'Fourth Article',
+      author: 'John Doe',
+      content: 'This is the fourth article',
+      published: false,
+    },
+    {
+      title: 'Fifth Article',
+      author: 'John Doe',
+      content: 'This is the fifth article',
+      published: false,
+    },
+    {
+      title: 'Sixth Article',
+      author: 'John Doe',
+      content: 'This is the sixth article',
+      published: false,
+    },
+    {
+      title: 'Seventh Article',
+      author: 'John Doe',
+      content: 'This is the seventh article',
+      published: false,
+    },
+    {
+      title: 'Eighth Article',
+      author: 'John Doe',
+      content: 'This is the eighth article',
+      published: false,
+    },
+    {
+      title: 'Ninth Article',
+      author: 'John Doe',
+      content: 'This is the ninth article',
+      published: false,
+    },
+    {
+      title: 'Tenth Article',
+      author: 'John Doe',
+      content: 'This is the tenth article',
+      published: false,
+    },
   ];
 
   const res = await ArticleModel.insertMany(articles);

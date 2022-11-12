@@ -1,9 +1,12 @@
 import { ArticleEntity } from '~/lib/api';
+import { PaginatedResponse } from '~/lib/api';
+import { Pagination } from './pagination';
 
 import { Grid, GridItem, Button, Heading, HStack, Text, Spinner } from '@chakra-ui/react';
 type ArticleListProps = {
-  isLoading: boolean;
-  articles: ArticleEntity[] | undefined;
+  articles: PaginatedResponse<ArticleEntity> | undefined;
+  page: number;
+  onClickPagination: (page: number) => void;
 };
 
 const formatDate = (date: string) => {
@@ -19,41 +22,45 @@ const formatDate = (date: string) => {
     .join('-');
 };
 
-export function ArticleList({ isLoading, articles }: ArticleListProps) {
-  if (!articles || isLoading) {
+export function ArticleList({ articles, page, onClickPagination }: ArticleListProps) {
+  if (!articles) {
     return <Spinner />;
   }
 
   return (
-    <Grid templateColumns="repeat(4, 1fr)" gap={6} padding="10" alignItems="center">
-      <Heading gridColumn="1/5" fontSize="16px" as="h2">
-        投稿一覧
-      </Heading>
-      {articles?.map((article) => {
-        return (
-          <>
-            <GridItem>
-              <Text>{article.title}</Text>
-            </GridItem>
-            <GridItem>
-              <Text>{article.author}</Text>
-            </GridItem>
-            <GridItem>
-              <Text>{formatDate(article.createdAt)}</Text>
-            </GridItem>
-            <GridItem>
-              <HStack>
-                <Button colorScheme="red" size="sm">
-                  削除
-                </Button>
-                <Button colorScheme="blue" size="sm">
-                  編集
-                </Button>
-              </HStack>
-            </GridItem>
-          </>
-        );
-      })}
-    </Grid>
+    <>
+      <Grid templateColumns="repeat(4, 1fr)" gap={6} padding="10" alignItems="center">
+        <Heading gridColumn="1/5" fontSize="16px" as="h2">
+          投稿一覧
+        </Heading>
+        {articles?.data.map((article) => {
+          return (
+            <>
+              <GridItem>
+                <Text>{article.title}</Text>
+              </GridItem>
+              <GridItem>
+                <Text>{article.author}</Text>
+              </GridItem>
+              <GridItem>
+                <Text>{formatDate(article.createdAt)}</Text>
+              </GridItem>
+              <GridItem>
+                <HStack>
+                  <Button colorScheme="red" size="sm">
+                    削除
+                  </Button>
+                  <Button as="a" href={`/admin/articles/${article._id}`} colorScheme="blue" size="sm">
+                    編集
+                  </Button>
+                </HStack>
+              </GridItem>
+            </>
+          );
+        })}
+      </Grid>
+
+      <Pagination page={page} totalPages={articles.pagination.totalPages} onClickPagination={onClickPagination} />
+    </>
   );
 }
