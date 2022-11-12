@@ -1,6 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
+import morgan from 'morgan';
 
 export const logger = (req: Request, res: Response, next: NextFunction) => {
-  console.log(`${req.method} ${req.path}`);
+  morgan('dev')(req, res, next);
   next();
 };

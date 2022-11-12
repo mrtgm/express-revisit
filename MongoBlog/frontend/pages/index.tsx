@@ -1,16 +1,14 @@
-import Head from "next/head";
-import Image from "next/image";
-import api from "~/lib/api";
+import Head from 'next/head';
+import Image from 'next/image';
+import api from '~/lib/api';
 
-import { useQuery } from "@tanstack/react-query";
-
-const fetchArticles = async () => {
-  const res = await fetch("http://localhost:3000/articles");
-  return res.json();
-};
+import { useApi } from '~/context/api';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
-  const { data, isLoading, error } = useQuery(["posts"], fetchArticles);
+  const api = useApi();
+
+  const { data, isLoading, error } = useQuery(['posts'], api.getArticles);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -27,7 +25,8 @@ export default function Home() {
           {data.map((post: any) => (
             <div key={post._id}>
               <h1>{post.title}</h1>
-              <p>{post.body}</p>
+              <p>{post.author}</p>
+              <p>{post.content}</p>
             </div>
           ))}
         </div>

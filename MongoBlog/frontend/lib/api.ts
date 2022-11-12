@@ -1,4 +1,8 @@
-import axios, { Axios, AxiosAdapter, AxiosInstance, AxiosResponse } from "axios";
+import axios, { Axios, AxiosAdapter, AxiosInstance, AxiosResponse } from 'axios';
+
+type ApiHandlerOption = {
+  accessToken?: string;
+};
 
 type ArticleEntity = {
   _id: string;
@@ -17,10 +21,14 @@ type ArticleOption = {
 
 class ApiHandler {
   private api: AxiosInstance;
-  constructor() {
+  constructor({ accessToken }: ApiHandlerOption) {
     this.api = axios.create({
-      baseURL: "http://localhost:3000/",
+      baseURL: 'http://localhost:8080/',
       withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
   }
 
@@ -28,14 +36,17 @@ class ApiHandler {
     console.log(response);
   }
 
-  public getArticles = () => this.api.get<ArticleEntity[]>("/articles");
-  public getArticle = (id: string) => this.api.get<ArticleEntity>(`/articles/${id}`);
+  public getArticles = () => this.api.get<ArticleEntity[]>('/articles').then((res) => res.data);
 
-  public createArticle = (article: ArticleOption) => this.api.post<ArticleEntity>("/articles", article);
+  public getArticle = (id: string) => this.api.get<ArticleEntity>(`/articles/${id}`).then((res) => res.data);
 
-  public updateArticle = (id: string, article: ArticleOption) => this.api.put<ArticleEntity>(`/articles/${id}`, article);
+  public createArticle = (article: ArticleOption) =>
+    this.api.post<ArticleEntity>('/articles', article).then((res) => res.data);
 
-  public deleteArticle = (id: string) => this.api.delete(`/articles/${id}`);
+  public updateArticle = (id: string, article: ArticleOption) =>
+    this.api.put<ArticleEntity>(`/articles/${id}`, article).then((res) => res.data);
+
+  public deleteArticle = (id: string) => this.api.delete(`/articles/${id}`).then((res) => res.data);
 }
 
-export default new ApiHandler();
+export default ApiHandler;

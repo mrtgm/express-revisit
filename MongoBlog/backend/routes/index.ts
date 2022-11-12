@@ -1,10 +1,10 @@
 import express from "express";
-import articleRoutes from "~/routes/article";
+import articlesRoutes from "~/routes/articles";
 import { notFound, errorHandler } from "~/controllers/error";
 
 const router = express.Router();
 
-router.use("/article", articleRoutes);
+router.use("/articles", articlesRoutes);
 
 router.use(notFound);
 router.use(errorHandler);

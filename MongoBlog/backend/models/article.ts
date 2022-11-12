@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const BlogSchema = new mongoose.Schema(
   {
@@ -12,4 +12,4 @@ const BlogSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Blog", BlogSchema);
+export default mongoose.model('Blog', BlogSchema);

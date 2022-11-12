@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
-import { ArticleModel } from "./models";
+import mongoose from 'mongoose';
+import { ArticleModel } from './models';
 
 mongoose.connect(process.env.MONGO_DB_URI as string);
 
 const db = mongoose.connection;
 
-db.once("open", () => {
-  console.log("Successfully connected to MongoDB using Mongoose!");
+db.once('open', () => {
+  console.log('Successfully connected to MongoDB using Mongoose!');
 });
 
 const seed = async () => {
@@ -14,28 +14,28 @@ const seed = async () => {
 
   const articles = [
     {
-      title: "First Article",
-      author: "John Doe",
-      content: "This is the first article",
+      title: 'First Article',
+      author: 'John Doe',
+      content: 'This is the first article',
       published: true,
     },
     {
-      title: "Second Article",
-      author: "John Doe",
-      content: "This is the second article",
+      title: 'Second Article',
+      author: 'John Doe',
+      content: 'This is the second article',
       published: true,
     },
     {
-      title: "Third Article",
-      author: "John Doe",
-      content: "This is the third article",
+      title: 'Third Article',
+      author: 'John Doe',
+      content: 'This is the third article',
       published: false,
     },
   ];
 
   const res = await ArticleModel.insertMany(articles);
 
-  console.log("Database seeded", res);
+  console.log('Database seeded', res);
 };
 
 seed().then(() => db.close());
