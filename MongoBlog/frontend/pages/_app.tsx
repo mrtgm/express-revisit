@@ -12,6 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
       domain={process.env.auth0Domain as string}
       clientId={process.env.auth0ClientId as string}
       audience={process.env.auth0Audience as string}
+      scope=""
       redirectUri={typeof window !== 'undefined' ? window.location.origin : ''}
     >
       <ApiProvider>

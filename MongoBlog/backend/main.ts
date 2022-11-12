@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import routes from '~/routes';
-import { logger } from '~/middleware';
 
 const app: express.Express = express();
 
@@ -30,9 +29,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Routes
 app.use('/', routes);
-
-// Debug
-app.use(logger);
 
 app.listen(app.get('port'), () => {
   console.log(`Server on port ${app.get('port')}`);

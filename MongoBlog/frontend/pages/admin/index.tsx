@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect, useState } from 'react';
 
 export default function Admin() {
   const LoginButton = () => {
@@ -6,7 +7,7 @@ export default function Admin() {
     return <button onClick={() => loginWithRedirect()}>Log In</button>;
   };
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user } = useAuth0();
 
   return (
     <div>

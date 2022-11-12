@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function Home() {
   const api = useApi();
 
-  const { data, isLoading, error } = useQuery(['posts'], api.getArticles);
+  const { data, isLoading, error } = useQuery([`posts${api.accessToken}`], api.getArticles);
 
   if (isLoading) {
     return <div>Loading...</div>;
