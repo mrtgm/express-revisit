@@ -23,11 +23,15 @@ const Admin: NextPageWithLayout = () => {
     setPage(page);
   };
 
+  if (!isAuthenticated) {
+    return <div>You must login</div>;
+  }
+
   return (
     <>
       <ArticleList articles={data} page={page} onClickPagination={onClickPagination} />
 
-      {isAuthenticated && <CreateArticleForm />}
+      <CreateArticleForm />
     </>
   );
 };
