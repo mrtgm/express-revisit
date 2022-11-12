@@ -8,7 +8,7 @@ export const useApi = () => useContext(ApiContext);
 export const ApiProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const api = useRef<ApiHandler>(new ApiHandler({}));
+  const [api, setApi] = useState<ApiHandler>(new ApiHandler({}));
 
   useEffect(() => {
     const getAccessToken = async () => {
@@ -18,12 +18,14 @@ export const ApiProvider: FunctionComponent<{ children: ReactNode }> = ({ childr
       });
 
       if (accessToken) {
-        api.current = new ApiHandler({ accessToken });
+        setApi(new ApiHandler({ accessToken }));
       }
     };
 
-    getAccessToken();
+    if (isAuthenticated) {
+      getAccessToken();
+    }
   }, [isAuthenticated]);
 
-  return <ApiContext.Provider value={api.current}>{children}</ApiContext.Provider>;
+  return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
 };

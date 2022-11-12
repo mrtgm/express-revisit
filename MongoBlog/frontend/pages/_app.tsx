@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ApiProvider } from '~/context/api';
+import { ChakraProvider } from '@chakra-ui/react';
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -17,7 +18,9 @@ export default function App({ Component, pageProps }: AppProps) {
     >
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
         </QueryClientProvider>
       </ApiProvider>
     </Auth0Provider>

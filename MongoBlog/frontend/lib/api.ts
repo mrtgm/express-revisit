@@ -4,12 +4,13 @@ type ApiHandlerOption = {
   accessToken?: string;
 };
 
-type ArticleEntity = {
+export type ArticleEntity = {
   _id: string;
   title: string;
   content: string;
   author: string;
   published: boolean;
+  createdAt: string;
 };
 
 type ArticleOption = {

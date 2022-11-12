@@ -1,14 +1,10 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import api from '~/lib/api';
-
 import { useApi } from '~/context/api';
 import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
   const api = useApi();
 
-  const { data, isLoading, error } = useQuery([`posts${api.accessToken}`], api.getArticles);
+  const { data, isLoading, error } = useQuery([`posts: ${api.accessToken}`], api.getArticles);
 
   if (isLoading) {
     return <div>Loading...</div>;

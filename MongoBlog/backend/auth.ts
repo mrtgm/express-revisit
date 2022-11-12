@@ -2,6 +2,7 @@ import { expressjwt, GetVerificationKey } from 'express-jwt';
 import jwks from 'jwks-rsa';
 import path from 'path';
 
+// JWT の検証
 export const checkJwt = expressjwt({
   secret: jwks.expressJwtSecret({
     cache: true,
