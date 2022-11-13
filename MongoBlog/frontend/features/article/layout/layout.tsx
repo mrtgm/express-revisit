@@ -1,10 +1,14 @@
 import { FunctionComponent, ReactNode } from 'react';
+import { useRouter } from 'next/router';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Container, Heading, HStack, Spacer } from '@chakra-ui/react';
+import { Container, Heading, HStack, Spacer, Box } from '@chakra-ui/react';
 import { MyLink } from '~/components/mylink';
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth0();
+  const router = useRouter();
+
+  console.log(router);
 
   return (
     <Container>
@@ -17,7 +21,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
         {isAuthenticated && <MyLink href="/admin/">Admin</MyLink>}
       </HStack>
 
-      {children}
+      <Box mt="8">{children}</Box>
     </Container>
   );
 };

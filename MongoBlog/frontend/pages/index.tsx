@@ -2,6 +2,7 @@ import type { NextPageWithLayout } from 'next';
 import { useApi } from '~/context/api';
 import { useQuery } from '@tanstack/react-query';
 import { Container, Box, Heading, Text, Flex, Spinner, Link } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Pagination } from '~/components/pagination';
 import { MyLink } from '~/components/mylink';
@@ -10,6 +11,8 @@ import { Layout } from '~/features/article/layout/layout';
 
 const Home: NextPageWithLayout = () => {
   const api = useApi();
+
+  const router = useRouter();
 
   const [page, setPage] = useState(1);
 
@@ -21,6 +24,7 @@ const Home: NextPageWithLayout = () => {
 
   const handleClickPagination = (page: number) => {
     setPage(page);
+    router.push(`/?page=${page}`);
   };
 
   if (error) {
@@ -31,11 +35,10 @@ const Home: NextPageWithLayout = () => {
     <>
       {data ? (
         <>
-          <Box>
+          <Flex gap="4" flexDirection="column">
             {data.data.map((post: any) => (
               <MyLink href={`/articles/${post._id}`}>
                 <Flex
-                  my="5"
                   key={post._id}
                   borderWidth="1px"
                   borderRadius="sm"
@@ -53,7 +56,7 @@ const Home: NextPageWithLayout = () => {
                 </Flex>
               </MyLink>
             ))}
-          </Box>
+          </Flex>
 
           <Pagination
             page={data.pagination.page}
