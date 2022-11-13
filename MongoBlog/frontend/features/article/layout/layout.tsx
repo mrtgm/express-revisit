@@ -11,10 +11,10 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   console.log(router);
 
   return (
-    <Container>
+    <Container maxW="80vw">
       <HStack align="center" mt="20px">
         <Heading as="h1" size="md">
-          <MyLink href="/">Blog</MyLink>
+          <MyLink href="/">📓 Blog</MyLink>
         </Heading>
 
         <Spacer />
