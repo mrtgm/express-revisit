@@ -11,7 +11,7 @@ export function Pagination({ page, totalPages, onClickPagination }: PaginationPr
       {new Array(totalPages).fill(0).map((_, index) => {
         const p = index + 1;
         return (
-          <Button isDisabled={page === p} colorScheme="blue" size="sm" onClick={() => onClickPagination(p)}>
+          <Button isDisabled={page === p} colorScheme="blue" size="sm" onClick={() => onClickPagination(p)} key={index}>
             {p}
           </Button>
         );

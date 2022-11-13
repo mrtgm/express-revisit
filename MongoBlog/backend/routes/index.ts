@@ -16,7 +16,7 @@ router.use(paginate.middleware(5, 50));
 router.use('/articles', articlesRoutes);
 router.use('/authors', authorsRoutes);
 router.use('/categories', categoriesRoutes);
-router.use('/comments', commentsRoutes);
+router.use('/articles/:articleId/comments', commentsRoutes);
 
 router.use(notFound);
 router.use(errorHandler);

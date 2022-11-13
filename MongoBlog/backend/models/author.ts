@@ -8,10 +8,10 @@ const AuthorSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    avatar: {
-      required: false,
-      type: String,
-    },
+    // avatar: {
+    //   required: false,
+    //   type: String,
+    // },  TODO:// AWS S3...... 今年中かな〜
     description: {
       required: true,
       type: String,

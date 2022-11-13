@@ -27,7 +27,7 @@ export function ArticleList({ articles, page, onClickPagination }: ArticleListPr
                 <Text>{article.title}</Text>
               </GridItem>
               <GridItem>
-                <Text>{article.author}</Text>
+                <Text>{article.author.name}</Text>
               </GridItem>
               <GridItem>
                 <Text>{article.createdAt}</Text>

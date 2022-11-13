@@ -1,5 +1,5 @@
 import { useApi } from '~/context/api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -9,19 +9,32 @@ import {
   Textarea,
   Spacer,
   Button,
+  Select,
   VStack,
   Checkbox,
 } from '@chakra-ui/react';
+import { ArticleEntity, AuthorEntity } from '~/lib/api';
 
 export function CreateArticleForm() {
   const api = useApi();
 
+  const [authors, setAuthors] = useState<AuthorEntity[]>([]);
   const [article, setArticle] = useState({
     title: '',
     author: '',
     content: '',
     published: false,
   });
+
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      const response = await api.getAuthors();
+      if (response) {
+        setAuthors(response);
+      }
+    };
+    fetchAuthors();
+  }, []);
 
   const handleChangeFormAttr = (event: any, formAttr: string) => {
     setArticle(() => ({
@@ -54,13 +67,18 @@ export function CreateArticleForm() {
             onChange={(e) => handleChangeFormAttr(e, 'title')}
           />
           <FormLabel htmlFor="author">Author</FormLabel>
-          <Input
+          <Select
             isInvalid={!article.author}
-            type="text"
             name="author"
             id="author"
             onChange={(e) => handleChangeFormAttr(e, 'author')}
-          />
+          >
+            {authors.map((author) => (
+              <option key={author._id} value={author._id}>
+                {author.name}
+              </option>
+            ))}
+          </Select>
           <FormLabel htmlFor="content">Content</FormLabel>
           <Textarea
             isInvalid={!article.author}

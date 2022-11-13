@@ -15,7 +15,7 @@ const CodeBlock: CodeComponent = ({ inline, className, children }: any) => {
 
 export function MarkdownRenderer({ markdown }: { markdown: string }) {
   return (
-    <VStack align="stretch" gap="4" bgColor="gray.100" p="8" borderRadius="10">
+    <VStack align="stretch" gap="8" bgColor="gray.100" p="8" borderRadius="10">
       <ReactMarkdown
         components={{
           code: CodeBlock,
@@ -26,7 +26,7 @@ export function MarkdownRenderer({ markdown }: { markdown: string }) {
           h5: (props: any) => <Heading as="h5" fontSize="14px" {...props} />,
           h6: (props: any) => <Heading as="h6" fontSize="12px" {...props} />,
           hr: (props: any) => <Divider {...props} />,
-          p: (props: any) => <Text as="p" fontSize="14px" {...props} />,
+          p: (props: any) => <Text as="p" fontSize="16px" {...props} />,
         }}
       >
         {markdown}

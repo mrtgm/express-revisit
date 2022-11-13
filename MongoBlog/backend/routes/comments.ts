@@ -1,5 +1,6 @@
 import express from 'express';
 import { commentsController } from '~/controllers';
+import { checkJwt } from '~/auth';
 
 const router = express.Router();
 
@@ -7,9 +8,9 @@ const router = express.Router();
 router.post('/', commentsController.create);
 
 //特定記事の全コメント取得
-router.get('/:articleId', commentsController.findAll);
+router.get('/', commentsController.findAll);
 
 //特定コメント削除
-router.delete('/:id', commentsController.deleteOne);
+router.delete('/:id', checkJwt, commentsController.deleteOne);
 
 export default router;

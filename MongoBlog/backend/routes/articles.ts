@@ -8,21 +8,18 @@ const router = express.Router();
 router.post('/', articlesController.create);
 
 //全記事取得
-router.get('/', checkJwt, articlesController.findAll);
-
-//公開記事取得
-router.get('/published', articlesController.findAllPublished);
+router.get('/', articlesController.findAll);
 
 //特定記事取得
 router.get('/:id', articlesController.findOne);
 
 //特定記事更新
-router.put('/:id', articlesController.update);
+router.put('/:id', checkJwt, articlesController.update);
 
 //特定記事削除
-router.delete('/:id', articlesController.deleteOne);
+router.delete('/:id', checkJwt, articlesController.deleteOne);
 
 //全記事削除
-router.delete('/', articlesController.deleteAll);
+router.delete('/', checkJwt, articlesController.deleteAll);
 
 export default router;

@@ -1,5 +1,6 @@
 import express from 'express';
 import { authorsController } from '~/controllers';
+import { checkJwt } from '~/auth';
 
 const router = express.Router();
 
@@ -13,9 +14,9 @@ router.get('/', authorsController.findAll);
 router.get('/:id', authorsController.findOne);
 
 //特定著者更新
-router.put('/:id', authorsController.update);
+router.put('/:id', checkJwt, authorsController.update);
 
 //特定著者削除
-router.delete('/:id', authorsController.deleteOne);
+router.delete('/:id', checkJwt, authorsController.deleteOne);
 
 export default router;

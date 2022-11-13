@@ -25,10 +25,32 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
+  // 著者・カテゴリ・公開状態で絞り込み
+  const buildQuery = (req: Request) => {
+    if (req.query) {
+      return Object.entries(req.query).reduce((acc, [key, value]) => {
+        if (key === 'author') {
+          return { ...acc, author: value };
+        }
+        if (key === 'category') {
+          return { ...acc, category: value };
+        }
+        if (key === 'published') {
+          return { ...acc, published: value };
+        }
+        return acc;
+      }, {});
+    }
+  };
+
   //https://qiita.com/takehilo/items/0163426cce40452ff2ac
 
   try {
-    const data = await ArticleModel.paginate({}, { page: Number(req.query.page), limit: Number(req.query.limit) });
+    const data = await ArticleModel.paginate(
+      { ...buildQuery(req) },
+      { page: Number(req.query.page), limit: Number(req.query.limit), populate: ['author', 'categories'] }
+    );
+
     res.json({
       data: data.docs,
       pagination: {
@@ -45,7 +67,7 @@ export const findOne = async (req: Request, res: Response, next: NextFunction) =
   const id = req.params.id;
 
   try {
-    const data = await ArticleModel.findById(id);
+    const data = await ArticleModel.findById(id).populate('author').populate('categories');
     if (!data) res.status(404).send({ message: 'Not found Article with id ' + id });
     else res.json(data);
   } catch (err) {
@@ -86,24 +108,6 @@ export const deleteAll = async (req: Request, res: Response, next: NextFunction)
   try {
     const data = await ArticleModel.deleteMany({});
     res.send({ message: `${data.deletedCount} Articles were deleted successfully!` });
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const findAllPublished = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = await ArticleModel.paginate(
-      { published: true },
-      { page: Number(req.query.page), limit: Number(req.query.limit) }
-    );
-    res.json({
-      data: data.docs,
-      pagination: {
-        page: data.page,
-        totalPages: data.pages,
-      },
-    });
   } catch (err) {
     next(err);
   }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useApi } from '~/context/api';
 import { useQuery } from '@tanstack/react-query';
-import { ArticleList } from '~/features/admin/components/article_list';
+import { AuthorList } from '~/features/admin/components/author_list';
 import { CreateArticleForm } from '~/features/admin/components/create_article_form';
 import { Layout } from '~/features/admin/layout/layout';
 import { useRouter } from 'next/router';
@@ -11,23 +11,15 @@ const Author: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
 
   const api = useApi();
-  const router = useRouter();
 
   const { data } = useQuery({
     queryKey: ['posts', api.accessToken, page],
-    queryFn: () => api.getArticles({ page, limit: 5 }),
-    keepPreviousData: true,
+    queryFn: () => api.getAuthors(),
   });
-
-  const handleClickPagination = (page: number) => {
-    setPage(page);
-    router.push(`/admin/?page=${page}`);
-  };
 
   return (
     <>
-      <ArticleList articles={data} page={page} onClickPagination={handleClickPagination} />
-      <CreateArticleForm />
+      <AuthorList authors={data} />
     </>
   );
 };

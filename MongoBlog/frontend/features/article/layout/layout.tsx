@@ -8,10 +8,6 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth0();
   const router = useRouter();
 
-  if (!isAuthenticated) {
-    return <div>You must login</div>;
-  }
-
   return (
     <Container maxW={{ base: '100vw', md: '80vw' }}>
       <HStack align="center" mt="20px">

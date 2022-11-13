@@ -24,15 +24,18 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
     <Container maxW={{ base: '100vw', md: '80vw' }}>
       <Header isAuthenticated={isAuthenticated} />
 
-      <Tabs mt="4" variant="soft-rounded" colorScheme="blue">
-        <TabList>
-          <Tab onClick={handleClickArticle}>記事</Tab>
-          <Tab onClick={handleClickCategory}>カテゴリー</Tab>
-          <Tab onClick={handleClickAuthor}>著者</Tab>
-        </TabList>
-      </Tabs>
-
-      <Box mt="8">{children}</Box>
+      {isAuthenticated && (
+        <>
+          <Tabs mt="4" variant="soft-rounded" colorScheme="blue">
+            <TabList>
+              <Tab onClick={handleClickArticle}>記事</Tab>
+              <Tab onClick={handleClickCategory}>カテゴリー</Tab>
+              <Tab onClick={handleClickAuthor}>著者</Tab>
+            </TabList>
+          </Tabs>
+          <Box mt="8">{children}</Box>
+        </>
+      )}
     </Container>
   );
 };

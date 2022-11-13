@@ -1,5 +1,6 @@
 import express from 'express';
 import { categoriesController } from '~/controllers';
+import { checkJwt } from '~/auth';
 
 const router = express.Router();
 
@@ -10,9 +11,9 @@ router.post('/', categoriesController.create);
 router.get('/', categoriesController.findAll);
 
 //特定カテゴリ更新
-router.put('/:id', categoriesController.update);
+router.put('/:id', checkJwt, categoriesController.update);
 
 //特定カテゴリ削除
-router.delete('/:id', categoriesController.deleteOne);
+router.delete('/:id', checkJwt, categoriesController.deleteOne);
 
 export default router;

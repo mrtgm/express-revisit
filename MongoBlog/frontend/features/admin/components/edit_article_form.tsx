@@ -17,12 +17,14 @@ import {
   TabPanels,
   TabPanel,
   IconButton,
+  Select,
   HStack,
 } from '@chakra-ui/react';
-import { DeleteIcon, ViewIcon } from '@chakra-ui/icons';
+import { DeleteIcon } from '@chakra-ui/icons';
 import { MyLink } from '~/components/mylink';
 import { useRouter } from 'next/router';
 import { MarkdownRenderer } from '~/components/markdown_renderer';
+import { AuthorEntity, CreateArticleOption } from '~/lib/api';
 
 type EditArticleFormProps = {
   articleId: string;
@@ -32,7 +34,9 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
   const api = useApi();
   const router = useRouter();
 
-  const [article, setArticle] = useState({
+  const [authors, setAuthors] = useState<AuthorEntity[]>([]);
+
+  const [article, setArticle] = useState<CreateArticleOption>({
     title: '',
     author: '',
     content: '',
@@ -42,12 +46,27 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
   useEffect(() => {
     const fetchArticle = async () => {
       const response = await api.getArticle(articleId);
+
       if (response) {
-        setArticle(response);
+        setArticle({
+          title: response.title,
+          author: response.author._id,
+          content: response.content,
+          published: response.published,
+        });
       }
     };
+
+    const fetchAuthors = async () => {
+      const response = await api.getAuthors();
+      if (response) {
+        setAuthors(response);
+      }
+    };
+
     if (articleId) {
       fetchArticle();
+      fetchAuthors();
     }
   }, [articleId]);
 
@@ -102,14 +121,19 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
 
           <Box w="100%">
             <FormLabel htmlFor="author">Author</FormLabel>
-            <Input
+            <Select
               isInvalid={!article.author}
-              type="text"
               name="author"
               id="author"
               value={article.author}
               onChange={(e) => handleChangeFormAttr(e, 'author')}
-            />
+            >
+              {authors.map((author) => (
+                <option key={author._id} value={author._id}>
+                  {author.name}
+                </option>
+              ))}
+            </Select>
           </Box>
 
           <Box w="100%">
@@ -144,7 +168,7 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
               type="checkbox"
               name="published"
               id="published"
-              checked={article.published}
+              isChecked={article.published}
               onChange={(e) => handleChangeFormAttr(e, 'published')}
             />
           </Box>
