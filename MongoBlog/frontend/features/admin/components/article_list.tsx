@@ -1,25 +1,12 @@
 import { ArticleEntity } from '~/lib/api';
 import { PaginatedResponse } from '~/lib/api';
-import { Pagination } from './pagination';
-
-import { Grid, GridItem, Button, Heading, HStack, Text, Spinner } from '@chakra-ui/react';
+import { Pagination } from '~/components/pagination';
+import { ViewIcon } from '@chakra-ui/icons';
+import { Grid, GridItem, Button, Heading, HStack, Text, Spinner, IconButton } from '@chakra-ui/react';
 type ArticleListProps = {
   articles: PaginatedResponse<ArticleEntity> | undefined;
   page: number;
   onClickPagination: (page: number) => void;
-};
-
-const formatDate = (date: string) => {
-  return new Date(date)
-    .toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-    .split('/')
-    .join('-');
 };
 
 export function ArticleList({ articles, page, onClickPagination }: ArticleListProps) {
@@ -43,7 +30,7 @@ export function ArticleList({ articles, page, onClickPagination }: ArticleListPr
                 <Text>{article.author}</Text>
               </GridItem>
               <GridItem>
-                <Text>{formatDate(article.createdAt)}</Text>
+                <Text>{article.createdAt}</Text>
               </GridItem>
               <GridItem>
                 <HStack>
@@ -53,6 +40,14 @@ export function ArticleList({ articles, page, onClickPagination }: ArticleListPr
                   <Button as="a" href={`/admin/articles/${article._id}`} colorScheme="blue" size="sm">
                     編集
                   </Button>
+                  <IconButton
+                    size="sm"
+                    aria-label="View"
+                    icon={<ViewIcon />}
+                    as="a"
+                    backgroundColor="transparent"
+                    href={`/articles/${article._id}`}
+                  />
                 </HStack>
               </GridItem>
             </>

@@ -1,4 +1,5 @@
 import axios, { Axios, AxiosAdapter, AxiosInstance, AxiosResponse } from 'axios';
+import { formatDateAdaptor } from './util';
 
 export type ApiHandlerOption = {
   accessToken?: string;
@@ -50,10 +51,6 @@ export default class ApiHandler {
     });
   }
 
-  private async onResponse({ request, options, response }: any) {
-    console.log(response);
-  }
-
   public getArticles = (option: GetArticleOption) =>
     this.api
       .get<PaginatedResponse<ArticleEntity>>('/articles', {
@@ -61,10 +58,16 @@ export default class ApiHandler {
           page: option.page,
           limit: option.limit,
         },
+        transformResponse: [formatDateAdaptor],
       })
       .then((res) => res.data);
 
-  public getArticle = (id: string) => this.api.get<ArticleEntity>(`/articles/${id}`).then((res) => res.data);
+  public getArticle = (id: string) =>
+    this.api
+      .get<ArticleEntity>(`/articles/${id}`, {
+        transformResponse: [formatDateAdaptor],
+      })
+      .then((res) => res.data);
 
   public createArticle = (article: CreateArticleOption) =>
     this.api.post<ArticleEntity>('/articles', article).then((res) => res.data);

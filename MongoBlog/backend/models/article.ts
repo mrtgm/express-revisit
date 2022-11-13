@@ -4,9 +4,24 @@ import paginate from 'mongoose-paginate';
 const BlogSchema = new mongoose.Schema(
   {
     title: String,
-    author: String,
     content: String,
     published: Boolean,
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Author',
+    },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
+    categories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+      },
+    ],
   },
   {
     timestamps: true,

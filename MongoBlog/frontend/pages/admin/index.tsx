@@ -19,7 +19,7 @@ const Admin: NextPageWithLayout = () => {
     keepPreviousData: true,
   });
 
-  const onClickPagination = (page: number) => {
+  const handleClickPagination = (page: number) => {
     setPage(page);
   };
 
@@ -29,8 +29,7 @@ const Admin: NextPageWithLayout = () => {
 
   return (
     <>
-      <ArticleList articles={data} page={page} onClickPagination={onClickPagination} />
-
+      <ArticleList articles={data} page={page} onClickPagination={handleClickPagination} />
       <CreateArticleForm />
     </>
   );

@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ApiProvider } from '~/context/api';
-import { ChakraProvider } from '@chakra-ui/react';
+import { StyleProvider } from '~/context/chakra';
 import type { AppPropsWithLayout } from 'next/app';
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     >
       <ApiProvider>
         <QueryClientProvider client={queryClient}>
-          <ChakraProvider>{getLayout(<Component {...pageProps} />)}</ChakraProvider>
+          <StyleProvider>{getLayout(<Component {...pageProps} />)}</StyleProvider>
         </QueryClientProvider>
       </ApiProvider>
     </Auth0Provider>

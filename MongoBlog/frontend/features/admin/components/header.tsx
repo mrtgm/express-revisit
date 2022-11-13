@@ -1,4 +1,5 @@
-import { HStack, Heading, Spacer, Button, Link, Divider } from '@chakra-ui/react';
+import { HStack, Heading, Spacer, Button, Divider } from '@chakra-ui/react';
+import { MyLink } from '~/components/mylink';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const LoginButton = () => {
@@ -20,7 +21,10 @@ export function Header({ isAuthenticated }: HeaderProps) {
     <>
       <HStack marginBlock="20px">
         <Heading fontSize="16px" as="h2">
-          <Link href="/admin/">管理画面</Link>
+          <MyLink href="/admin/" mr="4">
+            管理画面
+          </MyLink>
+          <MyLink href="/">ホーム</MyLink>
         </Heading>
         <Spacer />
 
