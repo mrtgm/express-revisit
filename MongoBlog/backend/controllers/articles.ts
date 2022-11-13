@@ -93,8 +93,17 @@ export const deleteAll = async (req: Request, res: Response, next: NextFunction)
 
 export const findAllPublished = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await ArticleModel.where({ published: true });
-    res.json(data);
+    const data = await ArticleModel.paginate(
+      { published: true },
+      { page: Number(req.query.page), limit: Number(req.query.limit) }
+    );
+    res.json({
+      data: data.docs,
+      pagination: {
+        page: data.page,
+        totalPages: data.pages,
+      },
+    });
   } catch (err) {
     next(err);
   }

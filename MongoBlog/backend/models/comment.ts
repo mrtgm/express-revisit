@@ -9,6 +9,10 @@ const CommentSchema = new mongoose.Schema({
     required: true,
     type: String,
   },
+  articleId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Article',
+  },
 });
 
 export default mongoose.model('Comment', CommentSchema);

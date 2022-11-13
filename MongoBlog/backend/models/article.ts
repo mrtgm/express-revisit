@@ -10,12 +10,6 @@ const BlogSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Author',
     },
-    comments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-      },
-    ],
     categories: [
       {
         type: mongoose.Schema.Types.ObjectId,

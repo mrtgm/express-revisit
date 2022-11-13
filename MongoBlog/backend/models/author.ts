@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ArticleModel } from '.';
 
 const AuthorSchema = new mongoose.Schema(
   {
@@ -29,5 +30,18 @@ const AuthorSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+AuthorSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+  const author: any = this;
+  await ArticleModel.updateMany(
+    {},
+    {
+      $pull: {
+        author: author._id,
+      },
+    }
+  );
+  next();
+});
 
 export default mongoose.model('Author', AuthorSchema);
