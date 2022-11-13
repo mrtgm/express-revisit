@@ -8,10 +8,12 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth0();
   const router = useRouter();
 
-  console.log(router);
+  if (!isAuthenticated) {
+    return <div>You must login</div>;
+  }
 
   return (
-    <Container maxW="80vw">
+    <Container maxW={{ base: '100vw', md: '80vw' }}>
       <HStack align="center" mt="20px">
         <Heading as="h1" size="md">
           <MyLink href="/">📓 Blog</MyLink>

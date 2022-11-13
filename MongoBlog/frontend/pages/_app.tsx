@@ -3,7 +3,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ApiProvider } from '~/context/api';
 import { StyleProvider } from '~/context/chakra';
-import type { AppPropsWithLayout } from 'next/app';
+import { NextPage } from 'next';
+import { ReactElement, ReactNode } from 'react';
+import { AppProps } from 'next/app';
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const queryClient = new QueryClient();

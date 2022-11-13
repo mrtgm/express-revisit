@@ -10,7 +10,6 @@ import {
   Spacer,
   Button,
   VStack,
-  Text,
   Checkbox,
   TabList,
   Tab,
@@ -78,7 +77,6 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
         </Heading>
         <Spacer />
         <IconButton aria-label="Delete" size="sm" icon={<DeleteIcon />} />
-        <IconButton aria-label="Delete" size="sm" icon={<ViewIcon />} />
       </HStack>
 
       <Spacer height="20px" />
@@ -86,7 +84,9 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
         <VStack align="start" gap="4">
           <Box>
             <FormLabel>URL</FormLabel>
-            {/* <Text> {`${process.env.frontendUrl}/articles/${articleId}`}</Text> */}
+            <MyLink href={`${process.env.frontendUrl}/articles/${articleId}`} isExternal color="blue.600">
+              {`${process.env.frontendUrl}/articles/${articleId}`}
+            </MyLink>
           </Box>
           <Box w="100%">
             <FormLabel htmlFor="title">Title</FormLabel>

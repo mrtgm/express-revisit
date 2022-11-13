@@ -1,11 +1,11 @@
 import { Heading, Box, Text, VStack, Divider } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { NextPageWithLayout } from 'next';
 import { useRouter } from 'next/router';
 import { MarkdownRenderer } from '~/components/markdown_renderer';
 import { useApi } from '~/context/api';
 import { CommentForm } from '~/features/article/components/comment_form';
 import { Layout } from '~/features/article/layout/layout';
+import { NextPageWithLayout } from '../_app';
 
 const Article: NextPageWithLayout = () => {
   const router = useRouter();
@@ -24,10 +24,10 @@ const Article: NextPageWithLayout = () => {
   }
 
   return (
-    <VStack align="stretch" borderWidth="1px" borderRadius="sm" p="10">
+    <VStack align="stretch" borderWidth="1px" borderRadius="sm" p={{ base: '5', md: '10' }}>
       <Box>
         <Heading>{data.title}</Heading>
-        <Text mt="2" as="p">
+        <Text mt="6" as="p">
           😏 {data.author} / ✏️ <strong>{data.createdAt}</strong>
         </Text>
       </Box>

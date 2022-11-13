@@ -7,7 +7,7 @@ import { Layout } from '~/features/admin/layout/layout';
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from '../_app';
 
-const Admin: NextPageWithLayout = () => {
+const Author: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
 
   const api = useApi();
@@ -32,6 +32,6 @@ const Admin: NextPageWithLayout = () => {
   );
 };
 
-Admin.getLayout = (page: any) => <Layout>{page}</Layout>;
+Author.getLayout = (page: any) => <Layout>{page}</Layout>;
 
-export default Admin;
+export default Author;

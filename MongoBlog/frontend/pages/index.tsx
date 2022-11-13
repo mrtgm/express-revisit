@@ -1,4 +1,3 @@
-import type { NextPageWithLayout } from 'next';
 import { useApi } from '~/context/api';
 import { useQuery } from '@tanstack/react-query';
 import { Container, Box, Heading, Text, Flex, Spinner, Link } from '@chakra-ui/react';
@@ -8,6 +7,7 @@ import { Pagination } from '~/components/pagination';
 import { MyLink } from '~/components/mylink';
 import { useState } from 'react';
 import { Layout } from '~/features/article/layout/layout';
+import { NextPageWithLayout } from './_app';
 
 const Home: NextPageWithLayout = () => {
   const api = useApi();
