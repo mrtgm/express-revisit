@@ -1,6 +1,28 @@
 import { CategoryModel } from '~/models';
 import { Request, Response, NextFunction } from 'express';
 
+export const create = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) {
+    res.status(400).send({ message: 'Content can not be empty' });
+    return;
+  }
+
+  const category = new CategoryModel({
+    name: req.body.name,
+    slug: req.body.slug,
+    avatar: req.body.avatar,
+    description: req.body.description,
+    links: req.body.links,
+  });
+
+  try {
+    const data = await category.save();
+    res.send(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await CategoryModel.find({});

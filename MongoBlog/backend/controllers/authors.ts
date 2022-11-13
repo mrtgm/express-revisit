@@ -1,6 +1,25 @@
 import { AuthorModel } from '~/models';
 import { Request, Response, NextFunction } from 'express';
 
+export const create = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) {
+    res.status(400).send({ message: 'Content can not be empty' });
+    return;
+  }
+
+  const author = new AuthorModel({
+    name: req.body.name,
+    slug: req.body.slug,
+  });
+
+  try {
+    const data = await author.save();
+    res.send(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await AuthorModel.find({});
